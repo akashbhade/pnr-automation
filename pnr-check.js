@@ -55,9 +55,9 @@ async function getPNRStatus(pnr) {
 
   console.log("Current Status:", status);
 
-  let lastStatus = null;
+  let lastStatus = "";
 
-  // read previous status from file
+  // read previous status
   if (fs.existsSync('status.json')) {
     const data = JSON.parse(fs.readFileSync('status.json'));
     lastStatus = data.status;
@@ -65,18 +65,17 @@ async function getPNRStatus(pnr) {
 
   console.log("Last Status:", lastStatus);
 
-  // ✅ CHECK HERE (this is what you asked)
   if (status && status !== lastStatus) {
+    console.log("Status changed → sending email");
+
     await sendEmail(status);
 
-    // save new status
+    // update file
     fs.writeFileSync('status.json', JSON.stringify({ status }));
-    console.log("Status changed → email sent ✅");
 
   } else {
-    console.log("No change → no email ❌");
+    console.log("No change → no email");
   }
-
 })();
 
 
