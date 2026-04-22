@@ -1,5 +1,6 @@
 const cron = require('node-cron');
 const axios = require('axios');
+const fs = require('fs');
 const nodemailer = require('nodemailer');
 const PNR_NUMBER = '8347553443';
 
@@ -52,13 +53,30 @@ async function getPNRStatus(pnr) {
 
   const status = await getPNRStatus(PNR_NUMBER);
 
-  console.log("Status:", status);
+  console.log("Current Status:", status);
 
-  if (status) {
-    await sendEmail(status);
-  } else {
-    console.log("Failed to get status");
+  let lastStatus = null;
+
+  // read previous status from file
+  if (fs.existsSync('status.json')) {
+    const data = JSON.parse(fs.readFileSync('status.json'));
+    lastStatus = data.status;
   }
+
+  console.log("Last Status:", lastStatus);
+
+  // ✅ CHECK HERE (this is what you asked)
+  if (status && status !== lastStatus) {
+    await sendEmail(status);
+
+    // save new status
+    fs.writeFileSync('status.json', JSON.stringify({ status }));
+    console.log("Status changed → email sent ✅");
+
+  } else {
+    console.log("No change → no email ❌");
+  }
+
 })();
 
 
