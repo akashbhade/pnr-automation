@@ -5,23 +5,72 @@ const nodemailer = require('nodemailer');
 const PNR_NUMBER = '8347553443';
 
 // 📧 Email function
-async function sendEmail(status) {
+async function sendEmail(status, pnrData = {}) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'akashbhade333@gmail.com',
-      pass: 'pdiiklugosbytnuq' // ⚠️ use new one
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
     }
   });
 
-  await transporter.sendMail({
-    from: 'akashbhade333@gmail.com',
-    to: 'akashbhade333@gmail.com',
-    subject: 'PNR Status Update',
-    text: `PNR Status: ${status}`
-  });
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: process.env.EMAIL_USER,
+    subject: `🚆 PNR Status Update - ${pnrData.pnrNumber || PNR_NUMBER}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; padding: 20px; background:#f4f6f8;">
+        <div style="max-width:600px;margin:auto;background:white;padding:20px;border-radius:10px;">
+          
+          <h2 style="color:#2c3e50;">🚆 PNR Status Update</h2>
 
-  console.log("📧 Email sent!");
+          <p style="font-size:16px;">
+            <b>Status:</b> 
+            <span style="color:${status === 'CONFIRMED' ? 'green' : 'orange'}; font-weight:bold;">
+              ${status}
+            </span>
+          </p>
+
+          <hr/>
+
+          <h3>📋 Passenger Details</h3>
+
+          <table style="width:100%; border-collapse: collapse;">
+            <tr>
+              <td><b>PNR Number</b></td>
+              <td>${pnrData.pnrNumber || PNR_NUMBER}</td>
+            </tr>
+            <tr>
+              <td><b>Train No</b></td>
+              <td>${pnrData.trainNumber || 'N/A'}</td>
+            </tr>
+            <tr>
+              <td><b>Journey Date</b></td>
+              <td>${pnrData.dateOfJourney || 'N/A'}</td>
+            </tr>
+            <tr>
+              <td><b>From → To</b></td>
+              <td>${pnrData.sourceStation || 'N/A'} → ${pnrData.destinationStation || 'N/A'}</td>
+            </tr>
+            <tr>
+              <td><b>Class</b></td>
+              <td>${pnrData.classType || 'N/A'}</td>
+            </tr>
+          </table>
+
+          <hr/>
+
+          <p style="font-size:12px;color:gray;">
+            Auto-generated PNR tracking alert
+          </p>
+
+        </div>
+      </div>
+    `
+  };
+
+  await transporter.sendMail(mailOptions);
+  console.log("📧 Beautiful email sent!");
 }
 
 // 🌐 API call
