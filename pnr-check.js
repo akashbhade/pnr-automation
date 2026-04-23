@@ -113,7 +113,21 @@ async function getPNRStatus(pnr) {
     console.log("Full response:", JSON.stringify(response.data, null, 2));
 
     // adjust based on actual response
-    return response.data.data.passengerList[0].currentStatusDetails;
+    return {
+  status: response.data.data.passengerList?.[0]?.currentStatusDetails || "N/A",
+
+  pnrNumber: response.data.data.pnrNumber,
+  trainNumber: response.data.data.trainNumber,
+  trainName: response.data.data.trainName,
+  dateOfJourney: response.data.data.dateOfJourney,
+  sourceStation: response.data.data.sourceStation,
+  destinationStation: response.data.data.destinationStation,
+  boardingPoint: response.data.data.boardingPoint,
+  reservationUpto: response.data.data.reservationUpto,
+  journeyClass: response.data.data.journeyClass,
+  chartStatus: response.data.data.chartStatus,
+  passengerCount: response.data.data.numberOfpassenger
+};
 
   } catch (err) {
     console.error("API Error:", err.response?.data || err.message);
