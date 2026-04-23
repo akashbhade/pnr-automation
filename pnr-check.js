@@ -17,7 +17,7 @@ async function sendEmail(status, pnrData = {}) {
 
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: process.env.EMAIL_USER,
+    to: process.env.EMAIL_TO,
     subject: `🚆 PNR Status Update - ${pnrData.pnrNumber || PNR_NUMBER}`,
     html: `
       <div style="font-family: Arial, sans-serif; padding: 20px; background:#f4f6f8;">
