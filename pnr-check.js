@@ -33,31 +33,54 @@ async function sendEmail(status, pnrData = {}) {
 
           <hr/>
 
-          <h3>📋 Passenger Details</h3>
+          <h3>🚆 Train Details</h3>
 
-          <table style="width:100%; border-collapse: collapse;">
-            <tr>
-              <td><b>PNR Number</b></td>
-              <td>${pnrData.pnrNumber || PNR_NUMBER}</td>
-            </tr>
-            <tr>
-              <td><b>Train No</b></td>
-              <td>${pnrData.trainNumber || 'N/A'}</td>
-            </tr>
-            <tr>
-              <td><b>Journey Date</b></td>
-              <td>${pnrData.dateOfJourney || 'N/A'}</td>
-            </tr>
-            <tr>
-              <td><b>From → To</b></td>
-              <td>${pnrData.sourceStation || 'N/A'} → ${pnrData.destinationStation || 'N/A'}</td>
-            </tr>
-            <tr>
-              <td><b>Class</b></td>
-              <td>${pnrData.classType || 'N/A'}</td>
-            </tr>
-          </table>
+<table style="width:100%; border-collapse: collapse;">
+  <tr>
+    <td><b>PNR Number</b></td>
+    <td>${pnrData.pnrNumber}</td>
+  </tr>
 
+  <tr>
+    <td><b>Train</b></td>
+    <td>${pnrData.trainNumber} - ${pnrData.trainName}</td>
+  </tr>
+
+  <tr>
+    <td><b>Journey Date</b></td>
+    <td>${pnrData.dateOfJourney}</td>
+  </tr>
+
+  <tr>
+    <td><b>From → To</b></td>
+    <td>${pnrData.sourceStation} → ${pnrData.destinationStation}</td>
+  </tr>
+
+  <tr>
+    <td><b>Boarding Point</b></td>
+    <td>${pnrData.boardingPoint}</td>
+  </tr>
+
+  <tr>
+    <td><b>Reservation Upto</b></td>
+    <td>${pnrData.reservationUpto}</td>
+  </tr>
+
+  <tr>
+    <td><b>Class</b></td>
+    <td>${pnrData.journeyClass}</td>
+  </tr>
+
+  <tr>
+    <td><b>Passengers</b></td>
+    <td>${pnrData.passengerCount}</td>
+  </tr>
+
+  <tr>
+    <td><b>Chart Status</b></td>
+    <td>${pnrData.chartStatus}</td>
+  </tr>
+</table>
           <hr/>
 
           <p style="font-size:12px;color:gray;">
