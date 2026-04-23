@@ -137,7 +137,8 @@ async function getPNRStatus(pnr) {
 (async () => {
   console.log("Fetching PNR status from API...");
 
-  const status = await getPNRStatus(PNR_NUMBER);
+  const data = await getPNRStatus(PNR_NUMBER);
+  const status = data.status;
 
   console.log("Current Status:", status);
 
@@ -151,14 +152,12 @@ async function getPNRStatus(pnr) {
 
   console.log("Last Status:", lastStatus);
 
-  if (status && status !== lastStatus) {
-    console.log("Status changed → sending email");
+  if (data.status && data.status !== lastStatus) {
+  console.log("Status changed → sending email");
 
-    await sendEmail(status);
+  await sendEmail(data.status, data);
 
-    // update file
-    fs.writeFileSync('status.json', JSON.stringify({ status }));
-
+  fs.writeFileSync('status.json', JSON.stringify({ status: data.status }));
   } else {
     console.log("No change → no email");
   }
